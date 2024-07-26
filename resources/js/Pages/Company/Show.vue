@@ -109,19 +109,22 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
 });
 
 const formatUrl = (url) => {
-      if (!/^https?:\/\//i.test(url)) {
-        return 'http://' + url;
-      }
-      return url;
-    }
+  if (!/^https?:\/\//i.test(url)) {
+    return 'http://' + url;
+  }
+  return url;
+}
 </script>
 
 <template>
   <ProfieLayout title="Profile">
     <div class="h-full md:w-[40rem] lg:w-[40rem]">
       <div class="px-2 my-2 bg-white md:p-4">
-        <div class="grid grid-cols-1 gap-2 mt-2 lg:grid-cols-2">
-          <img :src="company.logo_url" alt="company logo" class="w-[10rem]" />
+        <div class="grid grid-cols-1 mt-2 lg:grid-cols-2">
+          <!-- <img :src="company.logo_url" alt="company logo" class="w-[10rem]" /> -->
+          <div class="border-gray-300 rounded-full ">
+            <img :src="company.logo_url" alt="company logo" class="h-[7rem] w-[7rem] rounded-full" />
+          </div>
           <div>
             <p>{{ company.name }}</p>
             <p class="text-sm">{{ company.address }}</p>
@@ -196,7 +199,7 @@ const formatUrl = (url) => {
         <div v-if="tab === 'employees'" class="mt-2">
           <div v-for="employee in employeesList" class="p-2 mt-2 bg-white">
             <div class="flex items-center gap-2">
-              <img :src="employee.profile_photo_url" alt="" class="h-[5rem] rounded-full">
+              <img :src="employee.profile_photo_url" alt="" class="h-[5rem] w-[5rem] rounded-full">
               <div>
                 <Link :href="route('profile.display', { id: employee.id })" class="block">{{ employee.name }} </Link>
                 <Link :href="route('company.show', { id: employee.company.id })">{{ employee.company.name }}</Link>

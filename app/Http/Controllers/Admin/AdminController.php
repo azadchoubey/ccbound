@@ -168,23 +168,19 @@ class AdminController extends Controller
     }
 
     public function storeLogo(Request $request) {
-       
         $lastLogo = Logo::first();
         if ($lastLogo && File::exists(public_path($lastLogo->logo))) {
             File::delete($lastLogo->logo);
             $lastLogo->delete();
-          
-        }else{
-            Logo::query()->delete();
         }
 
-
         if ($request->hasFile('logo')) {
+            
             $logo = new Logo();
             
-            $imageName = $request->logo->getClientOriginalName();
+            $imageName = time().'.'.$request->logo->extension();
             
-         $request->file('logo')->move(public_path('uploads'), $imageName);
+            $request->logo->move(public_path('uploads'), $imageName);
             $logo->logo = 'uploads/'.$imageName;
             $logo->status = 1;
             $logo->save();

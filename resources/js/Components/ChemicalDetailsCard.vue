@@ -72,11 +72,11 @@ const isDocx = (fileName) => {
                                 @click="readMore = !readMore" class="font-semibold cursor-pointer">..read less</span>
                         </p>
                     </div>
-                    <a :href="details.docs_url" target="_blank" v-if="details.docs" class="mt-10 mb-2 ml-5">
-                        <img :src="details.docs_url" width="80" height="90" v-if="isImage(details.docs)" />
-                        <embed :src="details.docs_url" width="80" height="90" type="application/pdf"
+                    <a :href="details.docs_url" target="_blank" v-if="details.docs" class="mt-10 mb-2">
+                        <img :src="details.docs_url" width="80" height="90" v-if="isImage(details.docs)" class="mr-5" />
+                        <embed :src="details.docs_url" width="80" height="90" type="application/pdf" class="mr-5"
                             v-else-if="isPDF(details.docs)" />
-                        <img :src="'/assests/images/docfile.png'" width="50" height="70" class="mt-10 ml-5"  v-else-if="isDocx(details.docs)" />
+                        <img :src="'/assests/images/docfile.png'" width="50" height="70" class="mt-10 mr-5"  v-else-if="isDocx(details.docs)" />
                         
                         <!-- <p>{{ details.docs }}</p> -->
 

@@ -1,0 +1,1 @@
+import{o as a,c as s,w as t,a as r,h as c,L as n}from"./app-ad745f98.js";const _=["src"],l={__name:"AuthenticationCardLogo",setup(i){return(o,h)=>(a(),s(c(n),{href:"/"},{default:t(()=>{var e;return[r("img",{src:`/${(e=o.$page.props.logo)==null?void 0:e.logo}`,width:"50",height:"50",class:"rounded"},null,8,_)]}),_:1}))}};export{l as _};

@@ -34,22 +34,10 @@ class Enquiry extends Model
     }
 
     public function getDocsUrlAttribute()
-    {
-        // Ensure that $this->docs is an array
-        if (!is_array($this->docs) || empty($this->docs)) {
-            return []; // Return an empty array if docs is not an array or is empty
-        }
-    
-        $baseUrl = env('APP_URL') . '/storage/sale_docs/';
-        $urls = array_map(function ($filename) use ($baseUrl) {
-            // Handle cases where filenames might be null or not a string
-            return !empty($filename) ? $baseUrl . $filename : null;
-        }, $this->docs);
-    
-        // Remove any null values from the URLs array
-        return array_filter($urls);
+    {   
+        $url = env('APP_URL').'/storage/enquiry_docs/'.$this->docs;
+        return $url;
     }
-    
 
     public function getUserAttribute(){
         return $this->user();

@@ -137,7 +137,7 @@ const removeStaff = (staff) => {
 };
 
 const removeStructure = () => {
-    form.structure = null
+    form.structure = 'no image'
     props.enquiry.structure = null
     props.enquiry.structure_url = null
     document.getElementById('structure').value = '';
@@ -145,7 +145,7 @@ const removeStructure = () => {
 
 const removeDocs = () => {
     console.log('removeDocs');
-    form.docs = null
+    form.docs = 'no doc'
     props.enquiry.docs = null;
     props.enquiry.docs_url = null
     document.getElementById('docs').value = '';
@@ -279,7 +279,7 @@ const isDocx = (fileName) => {
                                     <img :src="'/assests/images/docfile.png'" width="80" height="90" class="mt-10 ml-5"
                                         v-else-if="isDocx(enquiry.docs)" />
 
-                                    <p>{{ enquiry.docs }}</p>
+                                    <!-- <p>{{ enquiry.docs }}</p> -->
                                 </a>
 
                             </div>

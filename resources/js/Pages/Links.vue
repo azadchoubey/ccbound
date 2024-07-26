@@ -25,15 +25,15 @@ const showLocation = ref(false);
 
 const logout = () => {
     showLocation.value = true;
-    setTimeout(function() {
-        Inertia.post(route('logout'), {}, {
-    onSuccess: () => {
-        window.location.href = '/';
-    }
-});
-       
+
+    setTimeout(function () {
+
+        Inertia.post(route("logout"), {}, {
+            onSuccess: () => {
+                history.replaceState(null, document.title, window.location.pathname + window.location.search);
+            }
+        });
     }, 1000);
-    
 };
 
 
@@ -179,6 +179,6 @@ const logout = () => {
                 <p class="mt-3">Wait for a Second</p>
             </center>
         </template>
-       
+
     </Loader>
 </template>

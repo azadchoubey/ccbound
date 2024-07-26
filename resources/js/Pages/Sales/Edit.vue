@@ -114,14 +114,14 @@ const removeStaff = (staff) => {
 };
 
 const removeStructure = () => {
-    form.structure = null
+    form.structure = 'no image'
     props.sale.structure = null
     props.sale.structure_url = null
     document.getElementById('structure').value = null;
 }
 
 const removeDocs = () => {
-    form.docs = null
+    form.docs = 'no doc'
     props.sale.docs = null
     props.sale.docs_url = null
     document.getElementById('docs').value = null;
@@ -192,7 +192,8 @@ const isDocx = (fileName) => {
                     <div>
                         <InputLabel for="structure" value="Structure" />
                         <input type="file" name="structure" @input="form.structure = $event.target.files[0]"
-                            id="structure" accept=".pdf, .jpg, .jpeg, .png, .doc, .docx" />{{ sale.structure }}
+                            id="structure" accept=".pdf, .jpg, .jpeg, .png, .doc, .docx" />
+                            <!-- {{ sale.structure }} -->
                         <button v-if="form.structure" type="button" class="text-red-800 bg-white rounded"
                             @click="removeStructure">X</button>
                         <InputError class="mt-2" :message="form.errors.structure" />
@@ -259,7 +260,7 @@ const isDocx = (fileName) => {
                                     <img :src="'/assests/images/docfile.png'" width="80" height="90" class="mt-10 ml-5"
                                         v-else-if="isDocx(sale.docs)" />
 
-                                    <p>{{ sale.docs }}</p>
+                                    <!-- <p>{{ sale.docs }}</p> -->
 
                                 </a>
                             </div>

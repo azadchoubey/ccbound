@@ -116,13 +116,12 @@ class EnquiryController extends Controller
         }
 
         if ($request->hasFile('docs')) {
-            foreach ($request->file('docs') as $file) {
-                $docsWithExt = $file->getClientOriginalName();
-                $docs = pathinfo($docsWithExt, PATHINFO_FILENAME);
-                $extension = $file->getClientOriginalExtension();
-                $docsNameToStore[] = $this->docsName($structure, $extension);
-                $file->move(public_path('storage/enquiry_docs'), $this->docsName($structure, $extension));
-            }
+            $docsWithExt = request()->file('docs')->getClientOriginalName();
+            $docs = pathinfo($docsWithExt, PATHINFO_FILENAME);
+            $extension = request()->file('docs')->getClientOriginalExtension();
+            $docsNameToStore = $this->docsName($structure, $extension);
+            // request()->file('docs')->storeAs('enquiry_docs', $docsNameToStore);
+            request()->file('docs')->move(public_path('storage/enquiry_docs'), $docsNameToStore);
         }
 
         $enquiry = new Enquiry();
@@ -134,7 +133,7 @@ class EnquiryController extends Controller
         $enquiry->purity_required = $request->purityRequired;
         $enquiry->structure = $structureNameToStore;
         $enquiry->description = $request->description;
-        $enquiry->docs = json_encode($docsNameToStore);
+        $enquiry->docs = $docsNameToStore;
         $enquiry->enquiry_show = $request->enquiry;
         $enquiry->country = $request->country;
         $enquiry->state = $request->state;
@@ -359,7 +358,7 @@ class EnquiryController extends Controller
         $structureNameToStore = $enquiry->structure;
         $docsNameToStore = $enquiry->docs;
 
-        if(!$request->structure && $enquiry->structure) {
+        if($request->structure=='no image' && $enquiry->structure) {
             $old_structure = public_path('storage/enquiry_structure/' . $enquiry->structure);
 
             if ($enquiry->structure && File::exists($old_structure)) {
@@ -367,10 +366,10 @@ class EnquiryController extends Controller
                 File::delete($old_structure);
             }
 
-            $structureNameToStore = $request->structure;
+            $structureNameToStore = null;
         }
 
-        if(!$request->docs && $enquiry->docs) {
+        if($request->docs == 'no doc' && $enquiry->docs) {
             $old_docs = public_path('storage/enquiry_docs/' . $enquiry->docs);
 
             if ($enquiry->docs && File::exists($old_docs)) {
@@ -378,7 +377,7 @@ class EnquiryController extends Controller
                 File::delete($old_docs);
             }
             
-            $docsNameToStore = $request->docs;
+            $docsNameToStore = null;
         }
 
         if ($request->hasFile('structure')) {

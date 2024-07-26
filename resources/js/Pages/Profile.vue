@@ -219,7 +219,7 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
         <p v-else>{{ profile.number }}</p>
 
         <div class="flex items-center gap-2 mt-2">
-          <img :src="profile.company.logo_url" alt="company logo" class="w-[10rem]" />
+          <img :src="profile.company.logo_url" alt="company logo" class="h-[7rem] w-[10rem]" />
           <Link :href="route('company.show', { id: profile.company_id })">@{{ profile.company.name }}</Link>
         </div>
         <p class="text-sm">{{ profile.address }}</p>

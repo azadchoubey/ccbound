@@ -110,7 +110,6 @@ class SalesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-       
     {
         $request->validate([
             'productName' => ['required', 'string', 'max:255'],
@@ -138,15 +137,13 @@ class SalesController extends Controller
             request()->file('structure')->move(public_path('storage/sale_structure'), $structureNameToStore);
         }
 
-      
         if ($request->hasFile('docs')) {
-            foreach ($request->file('docs') as $file) {
-                $docsWithExt = $file->getClientOriginalName();
-                $docs = pathinfo($docsWithExt, PATHINFO_FILENAME);
-                $extension = $file->getClientOriginalExtension();
-                $docsNameToStore[] = $this->docsName($structure, $extension);
-                $file->move(public_path('storage/sale_docs'), $this->docsName($structure, $extension));
-            }
+            $docsWithExt = request()->file('docs')->getClientOriginalName();
+            $docs = pathinfo($docsWithExt, PATHINFO_FILENAME);
+            $extension = request()->file('docs')->getClientOriginalExtension();
+            $docsNameToStore = $this->docsName($docs, $extension);
+            // request()->file('docs')->storeAs('sale_docs', $docsNameToStore);
+            request()->file('docs')->move(public_path('storage/sale_docs'), $docsNameToStore);
         }
 
         $sale = new Sale();
@@ -158,7 +155,7 @@ class SalesController extends Controller
         $sale->purity_required = $request->purityRequired;
         $sale->structure = $structureNameToStore;
         $sale->description = $request->description;
-        $sale->docs = json_encode($docsNameToStore);
+        $sale->docs = $docsNameToStore;
         $sale->sale_show = $request->sale;
         $sale->country = $request->country;
         $sale->state = $request->state;
@@ -407,7 +404,7 @@ class SalesController extends Controller
             }
         }
 
-        if (!$request->structure && $sale->structure) {
+        if ($request->structure == 'no image' && $sale->structure) {
             $old_structure = public_path('storage/sale_structure/' . $sale->structure);
 
             if ($sale->structure && File::exists($old_structure)) {
@@ -415,12 +412,12 @@ class SalesController extends Controller
                 File::delete($old_structure);
             }
 
-            $structureNameToStore = $request->structure;
-            $sale->structure = $structureNameToStore;
+            // $structureNameToStore = $request->structure;
+            $sale->structure = null;
             $sale->save();
         }
 
-        if (!$request->docs && $sale->docs) {
+        if ($request->docs == 'no doc' && $sale->docs) {
             $old_docs = public_path('storage/sale_docs/' . $sale->docs);
 
             if ($sale->docs && File::exists($old_docs)) {
@@ -428,8 +425,8 @@ class SalesController extends Controller
                 File::delete($old_docs);
             }
 
-            $docsNameToStore = $request->docs;
-            $sale->docs = $docsNameToStore;
+            // $docsNameToStore = $request->docs;
+            $sale->docs = null;
             $sale->save();
         }
 

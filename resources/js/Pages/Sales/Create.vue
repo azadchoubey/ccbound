@@ -101,9 +101,7 @@ const removeDocs = () => {
     form.docs = null
     document.getElementById('docs').value = null;
 }
-const handleFileUpload = (event) => {
-      form.docs = Array.from(event.target.files);
-    };
+
 </script>
 
 <template>
@@ -186,7 +184,8 @@ const handleFileUpload = (event) => {
                         </div>
                         <div>
                             <InputLabel for="docs" value="Docs" />
-                            <input type="file" name="docs" multiple @input="handleFileUpload" id="docs"                             accept=".pdf, .jpg, .jpeg, .png, .doc, .docx" />
+                            <input type="file" name="docs" @input="form.docs = $event.target.files[0]" id="docs"
+                                accept=".pdf, .jpg, .jpeg, .png, .doc, .docx" />
                                 <button  v-if="form.docs" class="text-red-800 bg-white rounded" @click="removeDocs">X</button>
                             <InputError class="mt-2" :message="form.errors.docs" />
                         </div>

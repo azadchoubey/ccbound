@@ -184,7 +184,7 @@ watchEffect(() => {
 
       <div class="col-span-3 sm:col-span-3" v-if="cities || form.city">
         <InputLabel for="city" value="City" />
-        <select class="w-full border border-gray-200 rounded-lg" v-model="form.city" required>
+        <select class="w-full border border-gray-200 rounded-lg" v-model="form.city">
           <option disabled>Select City</option>
           <option v-for="city in cities" :value="city.id">
             {{ city.name }}

@@ -95,16 +95,15 @@ class ProductController extends Controller
             request()->file('structure')->move(public_path('storage/product_structure'), $structureNameToStore);
         }
 
-      
         if ($request->hasFile('docs')) {
-            foreach ($request->file('docs') as $file) {
-                $docsWithExt = $file->getClientOriginalName();
-                $docs = pathinfo($docsWithExt, PATHINFO_FILENAME);
-                $extension = $file->getClientOriginalExtension();
-                $docsNameToStore[] = $this->docsName($structure, $extension);
-                $file->move(public_path('storage/product_docs'), $this->docsName($structure, $extension));
-            }
+            $docsWithExt = request()->file('docs')->getClientOriginalName();
+            $docs = pathinfo($docsWithExt, PATHINFO_FILENAME);
+            $extension = request()->file('docs')->getClientOriginalExtension();
+            $docsNameToStore = $this->docsName($docs, $extension);
+            // request()->file('docs')->storeAs('product_docs', $docsNameToStore);
+            request()->file('docs')->move(public_path('storage/product_docs'), $docsNameToStore);
         }
+
 
         $product = new Product();
         $product->created_by = Auth::user()->id;
@@ -115,7 +114,7 @@ class ProductController extends Controller
         $product->type = $request->type;
         $product->description = $request->description;
         $product->category = $request->category;
-        $product->docs = json_encode($docsNameToStore);
+        $product->docs = $docsNameToStore;
         $product->country = $request->country;
         $product->state = $request->state;
         $product->city = $request->city;
@@ -214,7 +213,7 @@ class ProductController extends Controller
         $structureNameToStore = $product->structure;
         $docsNameToStore = $product->docs;
 
-        if(!$request->structure && $product->structure) {
+        if($request->structure == 'no image' && $product->structure) {
             $old_structure = public_path('storage/product_structure/' . $product->structure);
 
             if ($product->structure && File::exists($old_structure)) {
@@ -222,10 +221,10 @@ class ProductController extends Controller
                 File::delete($old_structure);
             }
 
-            $structureNameToStore = $request->structure;
+            $structureNameToStore = null;
         }
         
-        if(!$request->docs && $product->docs) {
+        if($request->docs == 'no doc' && $product->docs) {
             
             $old_docs = public_path('storage/product_docs/' . $product->docs);
 
@@ -233,7 +232,7 @@ class ProductController extends Controller
 
                 File::delete($old_docs);
             }
-            $docsNameToStore = $request->docs;
+            $docsNameToStore = null;
         }
 
 
