@@ -28,7 +28,7 @@ const logout = () => {
     setTimeout(function() {
         Inertia.post(route('logout'), {}, {
     onSuccess: () => {
-        window.location.href = route('login');
+        window.location.href = '/';
     }
 });
        
