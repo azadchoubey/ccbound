@@ -88,7 +88,7 @@ class AdminController extends Controller
         $user->role = $request->role;
         $user->save();
 
-        Session::flash('toast',"Admin created sucessfully!!");
+        Session::flash('toast',"Admin created successfully!!");
 
         return redirect(route('admin.admin.index'));
     }
@@ -139,7 +139,7 @@ class AdminController extends Controller
         $admin->role = $request->role;
         $admin->save();
 
-        Session::flash('toast','Admin deatils updated sucessfully!');
+        Session::flash('toast','Admin deatils updated successfully!');
 
         return redirect(route('admin.admin.index'));
     }

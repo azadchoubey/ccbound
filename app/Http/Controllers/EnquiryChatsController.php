@@ -402,7 +402,7 @@ class EnquiryChatsController extends Controller
 
         }
 
-        Session::flash('toast', "Chat Deleted Sucessfully!");
+        Session::flash('toast', "Chat Deleted Successfully!");
 
     }
 }

@@ -48,7 +48,7 @@ class CouponController extends Controller
         $coupon->discount = $request->discount;
         $coupon->save();
 
-        Session::flash('toast',"Coupon created sucessfully!");
+        Session::flash('toast',"Coupon created successfully!");
 
         return redirect(route('admin.coupon.index'));
     }
@@ -106,7 +106,7 @@ class CouponController extends Controller
         $coupon->discount = $request->discount;
         $coupon->save();
 
-        Session::flash('toast','Coupone update sucessfully!');
+        Session::flash('toast','Coupone update successfully!');
 
         return redirect(route('admin.coupon.index'));
     }

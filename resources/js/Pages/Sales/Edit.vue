@@ -94,7 +94,10 @@ const updateSale = () => {
     form.quote = document.getElementById('quote').value;
     form.post(route("sale.update", { sale: props.sale }), {
         onSuccess: (res) => {
-            Inertia.get(route('profile.display', { id: props.sale.user_id }))
+            setTimeout(() => {
+                Inertia.get(route('profile.display', { id: props.sale.user_id }))    
+            }, 1000);
+            
          },
     });
 };

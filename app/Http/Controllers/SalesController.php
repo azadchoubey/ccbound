@@ -177,7 +177,7 @@ class SalesController extends Controller
             }
         }
 
-        Session::flash('toast', 'Sale Added sucessfully!!');
+        Session::flash('toast', 'Sale Added successfully!!');
 
         return redirect(route('sales.index'));
     }
@@ -352,7 +352,7 @@ class SalesController extends Controller
     {
         if ($request->type == 'remove_staff') {
             $sale->staff()->detach($request->staff['id']);
-            Session::flash('taost', 'User removed Sucessfully!!');
+            Session::flash('taost', 'User removed Successfully!!');
             return;
         }
 
@@ -474,7 +474,7 @@ class SalesController extends Controller
             }
         }
 
-        Session::flash('toast', 'Sales updated sucessfully!');
+        Session::flash('toast', 'Sales updated successfully!');
     }
 
     /**
@@ -500,6 +500,6 @@ class SalesController extends Controller
 
         $sale->delete();
 
-        Session::flash('toast', 'Sale Deleted Sucessfully!!');
+        Session::flash('toast', 'Sale Deleted Successfully!!');
     }
 }

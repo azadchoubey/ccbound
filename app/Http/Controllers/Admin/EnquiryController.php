@@ -122,7 +122,7 @@ class EnquiryController extends Controller
 
         $enquiry->delete();
 
-        Session::flash('toast', 'Enquiry Deleted Sucessfully!!');
+        Session::flash('toast', 'Enquiry Deleted Successfully!!');
     }
 
     public function updateStatus(Request $request, Enquiry $enquiry)

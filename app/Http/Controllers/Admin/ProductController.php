@@ -114,7 +114,7 @@ class ProductController extends Controller
 
         $product->delete();
 
-        Session::flash('toast', 'Product Deleted Sucessfully!!');
+        Session::flash('toast', 'Product Deleted Successfully!!');
     }
 
     public function updateStatus(Request $request, Product $product)

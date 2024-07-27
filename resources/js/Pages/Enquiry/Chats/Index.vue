@@ -16,8 +16,6 @@ const props = defineProps({
 const chatsList = ref(props.chats)
 const search = ref(null)
 
-console.log(chatsList);
-
 const getChats = (page = 1) => {
   axios.get(route('sale.chats.index', { page: page }))
     .then(res => {

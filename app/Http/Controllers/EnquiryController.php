@@ -330,7 +330,7 @@ class EnquiryController extends Controller
     {
         if ($request->type == 'remove_staff') {
             $enquiry->staff()->detach($request->staff['id']);
-            Session::flash('toast', 'User removed Sucessfully!!');
+            Session::flash('toast', 'User removed Successfully!!');
             return;
         }
 
@@ -444,7 +444,7 @@ class EnquiryController extends Controller
             }
         }
 
-        Session::flash('toast', 'Enquiry updated sucessfully!');
+        Session::flash('toast', 'Enquiry updated successfully!');
     }
 
     /**
@@ -471,6 +471,6 @@ class EnquiryController extends Controller
 
         $enquiry->delete();
 
-        Session::flash('toast', 'Enquiry Deleted Sucessfully!!');
+        Session::flash('toast', 'Enquiry Deleted Successfully!!');
     }
 }

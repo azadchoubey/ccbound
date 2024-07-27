@@ -117,7 +117,10 @@ const updateEnquiry = () => {
     form.post(route("enquiry.update", { enquiry: props.enquiry }), {
         onSuccess: (res) => {
             // console.log("res" + res.props);
-            Inertia.get(route('profile.display', { id: props.enquiry.user_id }))
+            setTimeout(() => {
+                Inertia.get(route('profile.display', { id: props.enquiry.user_id }))    
+            }, 1000);
+            
         },
     });
 };
@@ -144,7 +147,6 @@ const removeStructure = () => {
 }
 
 const removeDocs = () => {
-    console.log('removeDocs');
     form.docs = 'no doc'
     props.enquiry.docs = null;
     props.enquiry.docs_url = null

@@ -169,7 +169,7 @@ class SaleChatRoomController extends Controller
             }
         }
 
-        Session::flash('tag','Members added sucessfully!');
+        Session::flash('tag','Members added !');
     }
 
     public function newMessage(Request $request, $id){

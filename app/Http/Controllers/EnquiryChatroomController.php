@@ -171,6 +171,6 @@ class EnquiryChatroomController extends Controller
             }
         }
 
-        Session::flash('tag','Members added sucessfully!');
+        Session::flash('tag','Members added successfully!');
     }
 }

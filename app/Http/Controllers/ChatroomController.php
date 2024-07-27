@@ -106,7 +106,7 @@ class ChatroomController extends Controller
             }
         }
 
-        Session::flash('tag', 'Members added sucessfully!');
+        Session::flash('tag', 'Members added successfully!');
     }
 
     public function sendMessages(Request $request)
@@ -357,7 +357,7 @@ class ChatroomController extends Controller
         $member->pivot->messages_deleted_till = $lastMessage->id;
         $member->pivot->save();
 
-        Session::flash('toast', "Messages Deleted Sucessfully!");
+        Session::flash('toast', "Messages Deleted Successfully!");
     }
 
     public function exitGroup(Request $request, ChatRoom $chatroom)
@@ -407,7 +407,7 @@ class ChatroomController extends Controller
                 $cRoom->delete();
 
                 return redirect()->route('enquiry.chats.index');
-                // Session::flash('toast', "Messages Deleted Sucessfully!");
+                // Session::flash('toast', "Messages Deleted Successfully!");
             }
         }
     }

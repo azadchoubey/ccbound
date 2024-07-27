@@ -103,7 +103,10 @@ const filtered = computed(() => {
 const updateProduct = () => {
     form.post(route('product.update', { product: props.product }), {
         onSuccess: (res) => {
-            Inertia.get(route('profile.display', { id: props.product.user_id }))
+            setTimeout(() => {
+                Inertia.get(route('profile.display', { id: props.product.user_id }))    
+            }, 1000);
+            
         },
     });
 }

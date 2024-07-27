@@ -56,7 +56,7 @@ class SubsciptionController extends Controller
         $subscription->price = $request->price;
         $subscription->save();
 
-        Session::flash('toast','Subscription pack added sucessfully!!');
+        Session::flash('toast','Subscription pack added successfully!!');
 
         return redirect(route('admin.subscription.index'));
     }
@@ -116,7 +116,7 @@ class SubsciptionController extends Controller
         $subscription->days = $request->days;
         $subscription->save();
 
-        Session::flash("toast","Subscription updated sucessfully!!");
+        Session::flash("toast","Subscription updated successfully!!");
 
         return redirect(route('admin.subscription.index'));
     }

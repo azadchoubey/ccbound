@@ -119,7 +119,7 @@ class SalesController extends Controller
 
         $sale->delete();
 
-        Session::flash('toast', 'Sale Deleted Sucessfully!!');
+        Session::flash('toast', 'Sale Deleted Successfully!!');
     }
 
     public function updateStatus(Request $request, Sale $sale)

@@ -134,7 +134,7 @@ class CompanyController extends Controller
             'address' => $input['address'],
         ])->save();
 
-        Session::flash('tag',"Company Profile updated sucessfully!!");
+        Session::flash('tag',"Company Profile updated successfully!!");
     }
     
     public function updateLogo(Request $request, Company $company){
@@ -161,7 +161,7 @@ class CompanyController extends Controller
         request()->file('logo')->move(public_path('storage/company_logo'), $logoNameToStore);
         
         $company->forceFill(['logo'=>$logoNameToStore])->save();
-        Session::flash('tag',"Company Logo updated sucessfully!!");
+        Session::flash('tag',"Company Logo updated successfully!!");
     }
 
     /**

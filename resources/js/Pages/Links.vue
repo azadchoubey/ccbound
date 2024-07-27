@@ -31,6 +31,18 @@ const logout = () => {
         Inertia.post(route("logout"), {}, {
             onSuccess: () => {
                 history.replaceState(null, document.title, window.location.pathname + window.location.search);
+                // Push a new state into the history
+                history.pushState(null, null, location.href);
+
+                // Replace the current state with a new one to disable back navigation
+                history.replaceState(null, null, location.href);
+
+                window.addEventListener('popstate', function (event) {
+                    // If the back button is pressed, stay on the current page
+                    history.pushState(null, null, location.href);
+                });
+
+                window.location.href="/";
             }
         });
     }, 1000);

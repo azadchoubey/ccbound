@@ -78,7 +78,7 @@ class UserController extends Controller
             'role' => 'user',
         ]);
 
-        Session::flash('toast', 'User created Sucessfully!');
+        Session::flash('toast', 'User created Successfully!');
 
         $wallet = new Wallet();
         $wallet->user_id = $user->id;
@@ -146,7 +146,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        Session::flash('toast', "User updated sucessfully!!");
+        Session::flash('toast', "User updated successfully!!");
         return redirect(route('users.index'));
     }
 

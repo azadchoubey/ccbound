@@ -129,7 +129,7 @@ class ProductController extends Controller
             }
         }
 
-        Session::flash('toast', 'Product Added sucessfully!!');
+        Session::flash('toast', 'Product Added successfully!!');
 
         return redirect(route('product.index'));
     }
@@ -292,7 +292,7 @@ class ProductController extends Controller
             }
         }
 
-        Session::flash('toast', 'Product updated sucessfully!');
+        Session::flash('toast', 'Product updated successfully!');
     }
 
     /**
@@ -317,7 +317,7 @@ class ProductController extends Controller
 
         $product->delete();
 
-        Session::flash('toast', 'Product Deleted Sucessfully!!');
+        Session::flash('toast', 'Product Deleted Successfully!!');
     }
 
     public function share(Request $request, Product $product)
@@ -356,6 +356,6 @@ class ProductController extends Controller
             }
         }
 
-        // Session::flash('toast','Product shared to sales sucessfully!!');
+        // Session::flash('toast','Product shared to sales successfully!!');
     }
 }

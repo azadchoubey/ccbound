@@ -95,9 +95,9 @@ const deleteChats = () => {
   const form = useForm();
   form.post(route('chatroom.deleteChats', { chatrooms: selected.value }));
 
-  axios.get(`enquiry-chats/${props.chat.id}`).then(res => {
-    chatroomList.value = res.data
-  })
+  // axios.get(`enquiry-chats/${props.chat.id}`).then(res => {
+  //   chatroomList.value = res.data
+  // })
 
 }
 
