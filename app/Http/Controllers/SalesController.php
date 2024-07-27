@@ -13,11 +13,13 @@ use Session;
 use DateTime;
 use App\Models\EnquiryChat;
 use App\Models\ChatRoomMember;
+use App\Models\City;
 use App\Models\Country;
 use App\Models\SaleChat;
 use App\Models\Enquiry;
 use App\Models\User;
 use App\Models\Message;
+use App\Models\State;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 
@@ -67,9 +69,11 @@ class SalesController extends Controller
 
         if ($request->city) {
             $productQuery->where('city', $request->city);
+            $filterCity = City::where('id', $request->city)->first();
         }
         if ($request->state) {
             $productQuery->where('state', $request->state);
+            $filterState = State::where('id', $request->state)->first();
         }
         if ($request->country) {
             $productQuery->where('country', $request->country);
@@ -86,7 +90,7 @@ class SalesController extends Controller
         $products = $productQuery->paginate(10);
 
         $countries = Country::all();
-        return Inertia::render('Sales/Index', compact('sales', 'products', 'countries', 'filterCountry'));
+        return Inertia::render('Sales/Index', compact('sales', 'products', 'countries', 'filterCountry', 'filterState', 'filterCity'));
     }
 
     /**

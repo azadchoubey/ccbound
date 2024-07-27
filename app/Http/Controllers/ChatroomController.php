@@ -373,11 +373,11 @@ class ChatroomController extends Controller
 
     public function deleteChats(Request $request)
     { 
+       
         if ($request->chatrooms) {
             foreach ($request->chatrooms as $chatroom) {
                 
                 $cRoom = ChatRoom::find($chatroom['id']);
-                
                 
                 $messages = Message::where('chatroom_id', $chatroom['id'])->get();
                 foreach($messages as $message) {
@@ -406,7 +406,8 @@ class ChatroomController extends Controller
 
                 $cRoom->delete();
 
-                return redirect()->route('enquiry.chats.index');
+                return;
+                // return redirect()->route('enquiry.chats.index');
                 // Session::flash('toast', "Messages Deleted Successfully!");
             }
         }

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Company;
 use App\Models\Country;
+use App\Models\State;
 use Illuminate\Support\Facades\Storage;
 // use File;
 use Illuminate\Support\Facades\File;
@@ -24,6 +26,8 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $filterCountry = null;
+        $filterState = null;
+        $filterCity = null;
 
         $productsQuery = Product::query();
         $productsQuery->where('approved', '1')->where('active', 1);
@@ -40,9 +44,11 @@ class ProductController extends Controller
         }
         if ($request->state && $request->state!="null") {
             $productsQuery->where('state', $request->state);
+            $filterState = State::where('id', $request->state)->first();
         }
         if ($request->city && $request->city!="null") {
             $productsQuery->where('city', $request->city);
+            $filterCity = City::where('id', $request->city)->first();
         }
         
         $products = $productsQuery->paginate(4);
@@ -52,7 +58,7 @@ class ProductController extends Controller
 
         $countries = Country::all();
 
-        return Inertia::render('Product/Index', compact('products', 'countries','filterCountry'));
+        return Inertia::render('Product/Index', compact('products', 'countries','filterCountry', 'filterState', 'filterCity'));
     }
 
     /**

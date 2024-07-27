@@ -16,7 +16,9 @@ const props = defineProps({
     sessions: Array,
     enquiries: Object,
     countries: Object,
-    filterCountry: Object
+    filterCountry: Object,
+    filterCity: Object,
+    filterState: Object
 });
 const showLocation = ref(false);
 const searchQuery = ref("");
@@ -67,7 +69,6 @@ const loadMore = () => {
 };
 
 watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
-    console.log(newSearchQuery);
     if (newSearchQuery.value !== "") {
         axios
             .get(route("enquiry.index", { search: newSearchQuery }))
@@ -98,6 +99,8 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
             </div>
 
             <div class="flex justify-end w-full px-2 py-1">
+                <span class="mt-2 mr-3 text-blue-400">{{ filterCity ? filterCity.name.toUpperCase() : '' }}</span>
+                <span class="mt-2 mr-3 text-blue-400">{{ filterState ? filterState.name.toUpperCase() : '' }}</span>
                 <span class="mt-2 mr-3 text-blue-400">{{ filterCountry ? filterCountry.name.toUpperCase() : '' }}</span>
                 <button @click="showLocation = true" class="p-1 px-4 py-1 text-sm text-white bg-blue-600 rounded-lg">
                     Filter Location

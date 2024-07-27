@@ -105,7 +105,7 @@ const chatProductName = (title) => {
   return title.replace(props.chat.product_name+'-'+props.chat.cas_no+' - ','').trim();
 }
 
-
+console.log('enquiry');
 </script>
 
 

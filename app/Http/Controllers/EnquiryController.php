@@ -15,10 +15,12 @@ use Session;
 use App\Models\ChatRoom;
 use App\Models\Message;
 use App\Models\ChatRoomMember;
+use App\Models\City;
 use App\Models\Country;
 use App\Models\SaleChat;
 use App\Models\EnquiryChat;
 use App\Models\Sale;
+use App\Models\State;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 
@@ -32,6 +34,8 @@ class EnquiryController extends Controller
     public function index(Request $request)
     {
         $filterCountry = null;
+        $filterState = null;
+        $filterCity = null;
 
         $query = Enquiry::query();
         $query->where('enquiry_show', '1')->where('approved', '1')->where('active', 1)->where('expiry_date', '>=', date('Y-m-d') . ' 00:00:00')->orderBy('updated_at', 'DESC');
@@ -40,21 +44,22 @@ class EnquiryController extends Controller
             $query->where(function ($query) use ($request) {
                 $query->where('cas_no', 'like', '%' . $request->search . '%')->orWhere('product_name', 'like', '%' . $request->search . '%');
             });
-            
         }
 
         if ($request->country && $request->country != "null") {
             $query->where('country', $request->country);
-            
+
             $filterCountry = Country::where('id', $request->country)->first();
         }
 
         if ($request->state && $request->state != "null") {
             $query->where('state', $request->state);
+            $filterState = State::where('id', $request->state)->first();
         }
 
         if ($request->city && $request->city != "null") {
             $query->where('city', $request->city);
+            $filterCity = City::where('id', $request->city)->first();
         }
 
         $enquiries = $query->paginate(10);
@@ -63,7 +68,7 @@ class EnquiryController extends Controller
         }
 
         $countries = Country::all();
-        return Inertia::render('Enquiry/Index', compact('enquiries', 'countries', 'filterCountry'));
+        return Inertia::render('Enquiry/Index', compact('enquiries', 'countries', 'filterCountry', 'filterState', 'filterCity'));
     }
 
     /**
@@ -88,7 +93,7 @@ class EnquiryController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $validation = $request->validate([
             'productName' => ['required', 'string', 'max:255'],
             'casNo' => ['required', 'string', 'max:255', 'regex:/^[0-9-]+$/'],
@@ -358,7 +363,7 @@ class EnquiryController extends Controller
         $structureNameToStore = $enquiry->structure;
         $docsNameToStore = $enquiry->docs;
 
-        if($request->structure=='no image' && $enquiry->structure) {
+        if ($request->structure == 'no image' && $enquiry->structure) {
             $old_structure = public_path('storage/enquiry_structure/' . $enquiry->structure);
 
             if ($enquiry->structure && File::exists($old_structure)) {
@@ -369,14 +374,14 @@ class EnquiryController extends Controller
             $structureNameToStore = null;
         }
 
-        if($request->docs == 'no doc' && $enquiry->docs) {
+        if ($request->docs == 'no doc' && $enquiry->docs) {
             $old_docs = public_path('storage/enquiry_docs/' . $enquiry->docs);
 
             if ($enquiry->docs && File::exists($old_docs)) {
 
                 File::delete($old_docs);
             }
-            
+
             $docsNameToStore = null;
         }
 

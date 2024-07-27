@@ -16,7 +16,9 @@ const props = defineProps({
     sessions: Array,
     products: Object,
     countries: Object,
-    filterCountry: Object
+    filterCountry: Object,
+    filterCity: Object,
+    filterState: Object
 });
 
 const form = useForm({
@@ -199,9 +201,13 @@ const selectAll = (e) => {
                     </p>
                     <TextInput type="text" v-model="searchQuery" class="block w-full h-12 p-1 rounded-lg"
                         placeholder="Search Product Name/CAS No" />
-                    <div :class="`${!showProducts?'text-center':''}`">
+                    <div :class="`${!showProducts ? 'text-center' : ''}`">
                         <button type="button" class="p-1 px-4 py-1 mt-10 text-white bg-blue-600 rounded-lg"
                             @click="searchProducts">Submit</button>
+                        <span class="mt-2 ml-3 mr-3 text-blue-400">{{ filterCity ? filterCity.name.toUpperCase() : ''
+                            }}</span>
+                        <span class="mt-2 mr-3 text-blue-400">{{ filterState ? filterState.name.toUpperCase() : ''
+                            }}</span>
                         <span class="mt-5 ml-3 mr-3 text-blue-400">
                             {{ filterCountry ? filterCountry.name.toUpperCase() : '' }}</span>
                         <button @click="showLocation = true"
@@ -228,7 +234,7 @@ const selectAll = (e) => {
             </div>
             <input type="checkbox" class="block mb-5" value="0" v-model="selectProduct" v-if="showShareMessage"
                 @change="selectAll" />
-            <span v-if="showProducts"><b>Results For</b>: {{ searchQuery }}</span>    
+            <span v-if="showProducts"><b>Results For</b>: {{ searchQuery }}</span>
             <InfiniateScroll @loadMore="loadMore" class="mt-4 space-y-4" v-if="showProducts">
                 <div v-for="product in productsList.data" class="flex w-full gap-2">
                     <input type="checkbox" class="block" :value="product.id" v-model="form.products"

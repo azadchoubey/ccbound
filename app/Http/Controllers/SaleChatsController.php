@@ -153,7 +153,7 @@ class SaleChatsController extends Controller
         }
 
         $chat->user = $chat->user;
-        
+
         if ($request->wantsJson()) {
             return $chatrooms;
         }
@@ -370,7 +370,33 @@ class SaleChatsController extends Controller
         }
     }
 
-    public function deleteChat($id) {
+    public function deleteChat($id)
+    {
         dd($id);
+        $saleChat = SaleChat::find($id);
+        $enquiryChatRooms = EnquiryChatroom::where('enquiry_chat_id', $id)->get();
+
+        foreach ($enquiryChatRooms as $enquiryChatRoom) {
+
+            $chatRoom = ChatRoom::where('id', $enquiryChatRoom->chatroom_id)->first();
+            $messages = Message::where('chatroom_id', $enquiryChatRoom->chatroom_id)->get();
+
+            foreach ($messages as $message) {
+                if ($message->type == 'file') {
+                    $filePath = public_path('storage/message/' . $message->chatroom_id . '/' . $message->message);
+
+                    if ($message->message && File::exists($filePath)) {
+                        File::delete($filePath);
+                    }
+                }
+                $message->delete();
+            }
+
+            $chatRoom->delete();
+            $enquiryChatRoom->delete();
+            $enquiryChat->delete();
+        }
+
+        Session::flash('toast', "Chat Deleted Successfully!");
     }
 }

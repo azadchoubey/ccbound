@@ -16,7 +16,9 @@ const props = defineProps({
     sales: Object,
     products: Object,
     countries: Object,
-    filterCountry: Object
+    filterCountry: Object,
+    filterCity: Object,
+    filterState: Object
 });
 
 const showLocation = ref(false);
@@ -27,6 +29,8 @@ const salesList = ref(props.sales);
 const productsList = ref(props.products);
 const showProducts = ref(false);
 const filterCountry = props.filterCountry;
+const filterState = props.filterState;
+const filterCity = props.filterCity;
 
 const states = ref(null);
 const cities = ref(null);
@@ -159,7 +163,6 @@ const selectAll = (e) => {
         form.sales = []
         selectSale.value = null
     }
-    console.log(form.sales);
 }
 </script>
 
@@ -180,6 +183,8 @@ const selectAll = (e) => {
             </div>
 
             <div class="flex justify-end w-full px-2 py-1">
+                <span class="mt-2 mr-3 text-blue-400">{{ filterCity ? filterCity.name.toUpperCase() : '' }}</span>
+                <span class="mt-2 mr-3 text-blue-400">{{ filterState ? filterState.name.toUpperCase() : '' }}</span>
                 <span class="mt-2 mr-3 text-blue-400">{{ filterCountry ? filterCountry.name.toUpperCase() : '' }}</span>
                 <button @click="showLocation = true" class="p-1 px-4 py-1 text-sm text-white bg-blue-600 rounded-lg">
                     Filter Location
