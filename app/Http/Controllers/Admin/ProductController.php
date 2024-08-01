@@ -20,7 +20,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $productsQuery = Product::orderBy('approved', 'ASC')->orderBy('active', 'ASC');
+        $productsQuery = Product::orderBy('approved', 'ASC')->orderBy('active', 'ASC')->orderBy('created_at', 'DESC');
 
         if($request->search) {
             $productsQuery->where(function ($query) use ($request) {

@@ -52,10 +52,12 @@ const getMessages = async () => {
     })
   scroll(20)
 }
+
 const sendMessage = () => {
   if (message.value !== null && message.value !== '') {
     axios.post(route('chatroom.newMessage', { id: props.chatroom.id }), {
-      message: message.value
+      message: message.value,
+      type: 'enquiry'
     })
       .then(res => {
         console.log(res)

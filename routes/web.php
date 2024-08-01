@@ -101,7 +101,7 @@ Route::middleware(['middleware' => 'user', 'auth:sanctum', config('jetstream.aut
     Route::get('enquiry-chats/{chat}', [EnquiryChatsController::class, 'show'])->name('enquiry.chats.show');
     Route::post('enquiry-chats/create-new', [EnquiryChatsController::class, 'createNew'])->name('enquiry.chatroom.createnew');
     Route::post('enquiry-chats/{chat}/star', [EnquiryChatsController::class, 'star'])->name('enquiry.chats.star');
-    Route::delete('enquiry-chats/{id}', [EnquiryChatsController::class, 'deleteChat'])->name('enquiry.chats.delete');
+    Route::post('enquiry-chats', [EnquiryChatsController::class, 'deleteChat'])->name('enquiry.chats.delete');
 
     Route::get('enquiry-chatroom/{chatroom}', [EnquiryChatroomController::class, 'show'])->name('enquiry.chatroom.show');
     Route::get('enquiry-chatroom/temp/{sale}', [EnquiryChatroomController::class, 'tempshow'])->name('enquiry.chatroom.tempshow');
@@ -114,7 +114,7 @@ Route::middleware(['middleware' => 'user', 'auth:sanctum', config('jetstream.aut
     Route::get('sale-chats/{chat}', [SaleChatsController::class, 'show'])->name('sale.chats.show');
     Route::post('sale-chats/create-new', [SaleChatsController::class, 'createNew'])->name('sale.chatroom.createnew');
     Route::post('sale-chats/{chat}/star', [SaleChatsController::class, 'star'])->name('sale.chats.star');
-    Route::delete('sale-chats/{id}', [SaleChatsController::class, 'deleteChat'])->name('sale.chats.delete');
+    Route::post('sale-chats', [SaleChatsController::class, 'deleteChat'])->name('sale.chats.delete');
 
     Route::get('product-chats/redirect/{product}', [ProductChatsController::class, 'redirectToChat'])->name('product.chats.redirect');
     Route::post('product-chats/create-new', [ProductChatsController::class, 'createNew'])->name('product.chatroom.createnew');

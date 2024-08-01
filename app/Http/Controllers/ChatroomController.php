@@ -13,8 +13,10 @@ use App\Models\Sale;
 use App\Models\SaleStaff;
 use App\Models\User;
 use App\Models\Company;
+use App\Models\EnquiryChatroom;
 use App\Models\Product;
 use App\Models\ProductStaff;
+use App\Models\SaleChatroom;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use Auth;
@@ -25,6 +27,7 @@ class ChatroomController extends Controller
 {
     public function newMessage(Request $request, $id)
     {
+        
         $message = new Message();
         $message->chatroom_id = $id;
         $message->user_id = Auth::user()->id;
@@ -34,6 +37,28 @@ class ChatroomController extends Controller
         $chatroom = ChatRoom::find($id);
         $chatroom->message_at = Carbon::now()->toDateTimeString();
         $chatroom->save();
+
+        if($request->type=='enquiry') {
+            
+            $enquiryChatroom = EnquiryChatroom::where('chatroom_id', $id)->first();
+            $enquiryChat = EnquiryChat::find($enquiryChatroom->enquiry_chat_id);
+
+            $enquiryChat->updated_at = Carbon::now()->toDateTimeString();
+            $enquiryChat->last_message_at = Carbon::now()->toDateTimeString();
+            
+            $enquiryChat->save();
+
+        } else if($request->type=='sales') {
+            $salesChatroom = SaleChatroom::where('chatroom_id', $id)->first();
+            $salesChat = SaleChat::find($salesChatroom->sale_chat_id);
+
+            $salesChat->updated_at = Carbon::now()->toDateTimeString();
+            $salesChat->last_message_at = Carbon::now()->toDateTimeString();
+
+            
+            $salesChat->save();
+
+        }
 
         $message->readBy($chatroom)->attach(Auth::user()->id, ['chatroom_id' => $chatroom->id]);
 

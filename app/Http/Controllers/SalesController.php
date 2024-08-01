@@ -33,6 +33,8 @@ class SalesController extends Controller
     public function index(Request $request)
     {
         $filterCountry = null;
+        $filterState = null;
+        $filterCity = null;
 
         $salesQuery = Sale::query();
         $salesQuery->where('sale_show', 1)->where('active', 1)->orderBy('updated_at', 'DESC');

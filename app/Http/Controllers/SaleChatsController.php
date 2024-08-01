@@ -14,8 +14,11 @@ use App\Models\EnquiryChat;
 use App\Models\Sale;
 use App\Models\User;
 use App\Models\Company;
+use App\Models\SaleChatroom;
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 
 class SaleChatsController extends Controller
 {
@@ -126,8 +129,8 @@ class SaleChatsController extends Controller
      */
     public function show(Request $request, SaleChat $chat)
     {
-        $chatrooms = $chat->chatRooms()->paginate();
-
+        $chatrooms = $chat->chatRooms()->orderBy('updated_at', 'DESC')->paginate();
+        
         if ($request->tab === 'starred') {
             $chatrooms = $chat->starredChatRooms()->paginate();
         }
@@ -370,33 +373,37 @@ class SaleChatsController extends Controller
         }
     }
 
-    public function deleteChat($id)
+    public function deleteChat(Request $request)
     {
-        dd($id);
-        $saleChat = SaleChat::find($id);
-        $enquiryChatRooms = EnquiryChatroom::where('enquiry_chat_id', $id)->get();
+        
+        foreach($request->selectedChat as $chat) {
+            $saleChat = SaleChat::find($chat);
+            $saleChatRooms = SaleChatroom::where('sale_chat_id', $chat)->get();
 
-        foreach ($enquiryChatRooms as $enquiryChatRoom) {
+            foreach ($saleChatRooms as $saleChatRoom) {
 
-            $chatRoom = ChatRoom::where('id', $enquiryChatRoom->chatroom_id)->first();
-            $messages = Message::where('chatroom_id', $enquiryChatRoom->chatroom_id)->get();
+                $chatRoom = ChatRoom::where('id', $saleChatRoom->chatroom_id)->first();
+                $messages = Message::where('chatroom_id', $saleChatRoom->chatroom_id)->get();
+               
+                foreach ($messages as $message) {
+                    
+                    if ($message->type == 'file') {
+                        $filePath = public_path('storage/message/' . $message->chatroom_id . '/' . $message->message);
 
-            foreach ($messages as $message) {
-                if ($message->type == 'file') {
-                    $filePath = public_path('storage/message/' . $message->chatroom_id . '/' . $message->message);
-
-                    if ($message->message && File::exists($filePath)) {
-                        File::delete($filePath);
+                        if ($message->message && File::exists($filePath)) {
+                            File::delete($filePath);
+                        }
                     }
+
+                    $message->delete();
                 }
-                $message->delete();
+                
+                $chatRoom->delete();
+                $saleChatRoom->delete();
+                $saleChat->delete();
             }
-
-            $chatRoom->delete();
-            $enquiryChatRoom->delete();
-            $enquiryChat->delete();
         }
-
+        
         Session::flash('toast', "Chat Deleted Successfully!");
     }
 }

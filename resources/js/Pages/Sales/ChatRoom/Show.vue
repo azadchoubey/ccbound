@@ -59,7 +59,8 @@ const getMessages = async () => {
 const sendMessage = () => {
   if (message.value !== null && message.value !== '') {
     axios.post(route('chatroom.newMessage', { id: props.chatroom.id }), {
-      message: message.value
+      message: message.value,
+      type: 'sales'
     })
       .then(res => {
         console.log(res)
@@ -85,7 +86,7 @@ const shareDetails = () => {
   sendMessage();
   showOptions.value = false
 }
-console.log(chatroomMessages);
+
 </script>
 
 <template>

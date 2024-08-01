@@ -1,7 +1,7 @@
 <script setup>
 import SearchInput from "@/components/SearchInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link,useForm } from "@inertiajs/inertia-vue3";
 import { ref, watch, onMounted } from "vue";
 import TextInput from "../../../components/TextInput.vue";
 import { TailwindPagination } from 'laravel-vue-pagination';
@@ -16,8 +16,14 @@ const props = defineProps({
 const chatsList = ref(props.chats)
 const search = ref(null)
 
+const selectAll = ref(false)
+
+const form = useForm({
+  selectedChat: ref([])
+});
+
 const getChats = (page = 1) => {
-  axios.get(route('sale.chats.index', { page: page }))
+  axios.get(route('enquiry.chats.index', { page: page }))
     .then(res => {
       chatsList.value = res.data
     })
@@ -30,21 +36,51 @@ const sortChats = () => {
 };
 
 watch(search, async (newSearchQuery, oldSearchQuery) => {
-  
+
   if (newSearchQuery.value !== '') {
     axios.get(route('enquiry.chats.index', { search: newSearchQuery })).then(res => {
       chatsList.value = res.data
-      
+
     })
   } else {
     window.location.reload()
   }
 })
 
-const deleteChat = (enquiry_chat, index) => {
-  
-  chatsList.value.data.splice(index,1);
-  axios.delete(route('enquiry.chats.delete',{id: enquiry_chat.id}))
+const deleteChat = () => {
+  form.post(route('enquiry.chats.delete'));
+  getChats();
+}
+
+const selectAllChat = (e) => {
+  if (e.target.checked) {
+
+    form.selectedChat.value = [];
+
+    chatsList.value.data.forEach((e) => {
+      form.selectedChat.push(e.id);
+    });
+
+  } else {
+    form.selectedChat = [];
+  }
+
+}
+
+const checkSelectAll = (e) => {
+
+  if (e.target.checked) {
+    if (chatsList.value.data.length > 0 && form.selectedChat.length == chatsList.value.data.length) {
+      selectAll.value = true
+    }
+
+  } else {
+
+    if (chatsList.value.data.length > 0 && form.selectedChat.length != chatsList.value.data.length) {
+      selectAll.value = false
+    }
+  }
+
 }
 
 </script>
@@ -69,10 +105,18 @@ const deleteChat = (enquiry_chat, index) => {
         <div class="mt-2">
           <TextInput type="text" class="w-full p-2 bg-gray-200" v-model="search" placeholder="Search" />
         </div>
+        <div class="mt-3">
+          <SecondaryButton type="button" class="float-right text-white bg-red-600" @click="deleteChat"
+            v-if="form.selectedChat.length > 0 || selectAll">
+            Delete
+          </SecondaryButton>
+          <input type="checkbox" v-model="selectAll" class="ml-4" @change="selectAllChat" />
+        </div>
 
-        <div class="mt-2 max-w-[40rem] flex flex-col gap-2">
-          <div v-for="(chat, index) in chatsList.data" class="bg-white p-[1rem] flex justify-between items-center">
-            <Link :href="route('enquiry.chats.show', { chat: chat })">
+        <div class="mt-3 max-w-[40rem] flex flex-col gap-2">
+          <div v-for="(chat) in chatsList.data" class="bg-white p-[1rem] flex justify-between items-center">
+            <input type="checkbox" v-model="form.selectedChat" :value="chat.id" @change="checkSelectAll" />
+            <Link :href="route('enquiry.chats.show', { chat: chat })" class="w-full ml-3">
             <div>
               <p class="text-xl font-bold">{{ chat.product_name }}</p>
               <p>{{ chat.cas_no }}</p>
@@ -80,9 +124,9 @@ const deleteChat = (enquiry_chat, index) => {
             <p class="flex items-center justify-center w-6 h-6 text-sm text-white bg-blue-600 rounded-full"
               v-if="chat.unread_count != 0">
               {{ chat.unread_count }}</p>
-            
+
             </Link>
-            <SecondaryButton type="button" class="text-white bg-red-600" @click="deleteChat(chat, index)">Delete</SecondaryButton>
+
           </div>
           <div class="flex justify-center mt-2">
             <TailwindPagination :data="chatsList" @pagination-change-page="getChats" />

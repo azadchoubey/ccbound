@@ -18,7 +18,7 @@ use App\Models\Message;
 use Carbon\Carbon;
 use Auth;
 use Illuminate\Support\Facades\File;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class EnquiryChatsController extends Controller
 {
@@ -42,7 +42,7 @@ class EnquiryChatsController extends Controller
                 $query->where('cas_no', 'like', '%' . $request->search . '%')->orWhere('product_name', 'like', '%' . $request->search . '%');
             });
         }
-        $chats = $query->get();
+        $chats = $query->orderBy('updated_at','DESC')->get();
 
         // $chats = $query->get();
         foreach ($chats as $chat) {
@@ -69,7 +69,7 @@ class EnquiryChatsController extends Controller
             return $chat;
         }, $chatsArray);
 
-
+        
         $sortedChats = collect($chats)->sortByDesc('last_message_at')->values();
 
         $perPage = 15;
@@ -89,6 +89,7 @@ class EnquiryChatsController extends Controller
         if ($request->wantsJson()) {
             return $chats;
         }
+        
         // return $chats;
         return Inertia::render('Enquiry/Chats/Index', compact('chats'));
     }
@@ -133,8 +134,8 @@ class EnquiryChatsController extends Controller
      */
     public function show(Request $request, EnquiryChat $chat)
     {
-        $chatrooms = $chat->chatRooms()->paginate();
-        
+        $chatrooms = $chat->chatRooms()->orderBy('updated_at', 'DESC')->paginate();
+
         if ($request->tab === 'starred') {
             $chatrooms = $chat->starredChatRooms()->paginate();
         }
@@ -160,7 +161,7 @@ class EnquiryChatsController extends Controller
         }
 
         $chat->user = $chat->user;
-        
+
         if ($request->wantsJson()) {
             return $chatrooms;
         }
@@ -375,34 +376,34 @@ class EnquiryChatsController extends Controller
         }
     }
 
-    public function deleteChat($id)
+    public function deleteChat(Request $request)
     {
-        $enquiryChat = EnquiryChat::find($id);
-        $enquiryChatRooms = EnquiryChatroom::where('enquiry_chat_id', $id)->get();
         
-        foreach ($enquiryChatRooms as $enquiryChatRoom) {
+        foreach ($request->selectedChat as $chat) {
+            $enquiryChat = EnquiryChat::find($chat);
+            $enquiryChatRooms = EnquiryChatroom::where('enquiry_chat_id', $chat)->get();
 
-            $chatRoom = ChatRoom::where('id', $enquiryChatRoom->chatroom_id)->first();
-            $messages = Message::where('chatroom_id', $enquiryChatRoom->chatroom_id)->get();
+            foreach ($enquiryChatRooms as $enquiryChatRoom) {
 
-            foreach ($messages as $message) {
-                if ($message->type == 'file') {
-                    $filePath = public_path('storage/message/' . $message->chatroom_id . '/' . $message->message);
+                $chatRoom = ChatRoom::where('id', $enquiryChatRoom->chatroom_id)->first();
+                $messages = Message::where('chatroom_id', $enquiryChatRoom->chatroom_id)->get();
+                
+                foreach ($messages as $message) {
+                    if ($message->type == 'file') {
+                        $filePath = public_path('storage/message/' . $message->chatroom_id . '/' . $message->message);
 
-                    if ($message->message && File::exists($filePath)) {
-                        File::delete($filePath);
+                        if ($message->message && File::exists($filePath)) {
+                            File::delete($filePath);
+                        }
                     }
+                    $message->delete();
                 }
-                $message->delete();
+
+                $chatRoom->delete();
+                $enquiryChatRoom->delete();
+                $enquiryChat->delete();
             }
-
-            $chatRoom->delete();
-            $enquiryChatRoom->delete();
-            $enquiryChat->delete();
-
         }
-
         Session::flash('toast', "Chat Deleted Successfully!");
-
     }
 }
