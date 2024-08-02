@@ -11,7 +11,10 @@ const props = defineProps({
   confirmsTwoFactorAuthentication: Boolean,
   sessions: Array,
   chats: Object,
+  auth_id: Number
 });
+
+const auth_id = ref(props.auth_id)
 
 const chatsList = ref(props.chats)
 const search = ref(null)
@@ -25,7 +28,7 @@ const selectAll = ref(false)
 onMounted(() => {
   // sortChats();
 
-  console.log(props.chats);
+ 
 });
 
 
@@ -43,7 +46,7 @@ const sortChats = () => {
 };
 
 watch(search, async (newSearchQuery, oldSearchQuery) => {
-  console.log(newSearchQuery)
+  
   if (newSearchQuery.value !== '') {
     axios.get(route('sale.chats.index', { search: newSearchQuery })).then(res => {
       chatsList.value = res.data
@@ -134,7 +137,7 @@ const checkSelectAll = (e) => {
               <p>{{ chat.cas_no }}</p>
             </div>
             <p class="flex items-center justify-center w-6 h-6 text-sm text-white bg-blue-600 rounded-full"
-              v-if="chat.unread_count != 0">
+              v-if="chat.user_id != auth_id && chat.unread_count != 0">
               {{ chat.unread_count }}</p>
             </Link>
 

@@ -219,7 +219,7 @@ const isDocx = (fileName) => {
                         <InputLabel for="structure" value="Structure" />
                         <input type="file" name="structure" @input="form.structure = $event.target.files[0]"
                             id="structure" accept=".pdf, .jpg, .jpeg, .png, .doc, .docx" />
-                        <button v-if="form.structure" type="button" class="text-red-800 bg-white rounded"
+                        <button v-if="form.structure && form.structure != 'no image'" type="button" class="text-red-800 bg-white rounded"
                             @click="removeStructure">X</button>
                         <InputError class="mt-2" :message="form.errors.structure" />
                         <div>
@@ -268,7 +268,7 @@ const isDocx = (fileName) => {
                             <InputLabel for="docs" value="Docs" />
                             <input type="file" name="docs" @input="form.docs = $event.target.files[0]"
                                 accept=".pdf, .jpg, .jpeg, .png, .doc, .docx" id="docs" />
-                            <button v-if="form.docs" type="button" class="text-red-800 bg-white rounded"
+                            <button v-if="form.docs && form.docs != 'no doc'" type="button" class="text-red-800 bg-white rounded"
                                 @click="removeDocs">X</button>
                             <InputError class="mt-2" :message="form.errors.docs" />
                             <div>
@@ -276,8 +276,11 @@ const isDocx = (fileName) => {
                                     @click="removeDocs">X</button>
                                 <a :href="`${enquiry.docs_url}`" target="_blank" v-if="enquiry.docs">
                                     <img :src="enquiry.docs_url" width="80" height="90" v-if="isImage(enquiry.docs)" />
+                                    <div v-else-if="isPDF(enquiry.docs)">
                                     <embed :src="enquiry.docs_url" width="80" height="90" type="application/pdf"
-                                        v-else-if="isPDF(enquiry.docs)" />
+                                        />
+                                        <span class="text-blue-400">Preview</span>
+                                    </div>
                                     <img :src="'/assests/images/docfile.png'" width="80" height="90" class="mt-10 ml-5"
                                         v-else-if="isDocx(enquiry.docs)" />
 

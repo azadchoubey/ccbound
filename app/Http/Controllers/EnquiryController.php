@@ -97,7 +97,7 @@ class EnquiryController extends Controller
         $validation = $request->validate([
             'productName' => ['required', 'string', 'max:255'],
             'casNo' => ['required', 'string', 'max:255', 'regex:/^[0-9-]+$/'],
-            'structure' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:51002'],
+            'structure' => ['nullable', 'mimes:jpeg,jpg,png,gif,svg', 'max:51002'],
             'country' => ['required'],
         ]);
 
@@ -356,9 +356,12 @@ class EnquiryController extends Controller
         $request->validate([
             'productName' => ['required', 'string', 'max:255'],
             'casNo' => ['required', 'string', 'max:255', 'regex:/^[0-9-]+$/'],
-            'structure' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:512'],
             'country' => ['required'],
         ]);
+
+        if ($request->structure != 'no image') {
+            $request->validate(['structure' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:512']]);
+        }
 
         $structureNameToStore = $enquiry->structure;
         $docsNameToStore = $enquiry->docs;

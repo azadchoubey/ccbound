@@ -170,9 +170,9 @@ const selectAll = (e) => {
     <AppLayout title="Sales">
         <div class="max-w-[40rem]">
             <div class="flex justify-between px-2 my-3">
-                <p class="px-2 text-xl font-semibold">Sales</p>
+                <p class="px-2 text-2xl font-bold">Sales</p>
                 <Link :href="route('sales.create')">
-                <div class="flex items-center p-1 px-4 py-2 text-white bg-blue-600 rounded-lg">
+                <div class="flex items-center p-1 px-4 py-2 text-white bg-blue-600 rounded-lg text-">
                     <PlusIcon class="h-[1.3rem]" />
                     <p class="text-sm">Add Sale</p>
                 </div>
@@ -183,9 +183,9 @@ const selectAll = (e) => {
             </div>
 
             <div class="flex justify-end w-full px-2 py-1">
-                <span class="mt-2 mr-3 text-blue-400">{{ filterCity ? filterCity.name.toUpperCase() : '' }}</span>
-                <span class="mt-2 mr-3 text-blue-400">{{ filterState ? filterState.name.toUpperCase() : '' }}</span>
-                <span class="mt-2 mr-3 text-blue-400">{{ filterCountry ? filterCountry.name.toUpperCase() : '' }}</span>
+                <span class="mt-2 mr-2 text-blue-400" v-if="filterCity">{{  filterCity.name }},</span>
+                <span class="mt-2 mr-2 text-blue-400" v-if="filterState">{{ filterState.name }},</span>
+                <span class="mt-2 mr-3 text-blue-400">{{ filterCountry ? filterCountry.name : '' }}</span>
                 <button @click="showLocation = true" class="p-1 px-4 py-1 text-sm text-white bg-blue-600 rounded-lg">
                     Filter Location
 
@@ -204,7 +204,7 @@ const selectAll = (e) => {
             </div>
 
             <div class="flex flex-col gap-2 px-2">
-                <p class="text-xl font-bold">Sales</p>
+                <!-- <p class="text-xl font-bold">Sales</p> -->
                 <InfiniateScroll @loadMore="loadMore" class="space-y-4">
                     <input type="checkbox" class="block mb-5" value="0" v-model="selectSale" v-if="showShareMessage"
                         @change="selectAll" />

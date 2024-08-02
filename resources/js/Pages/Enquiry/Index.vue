@@ -85,7 +85,7 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
     <AppLayout title="Enquiry">
         <div class="max-w-[40rem]">
             <div class="flex justify-between px-2 my-3">
-                <p class="px-2 text-xl font-semibold">Enquiries</p>
+                <p class="px-2 text-2xl font-bold">Enquiries</p>
                 <Link :href="route('enquiry.create')">
                 <div class="flex items-center p-1 px-4 py-2 text-white bg-blue-600 rounded-lg">
                     <PlusIcon class="h-[1.3rem]" />
@@ -99,9 +99,9 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
             </div>
 
             <div class="flex justify-end w-full px-2 py-1">
-                <span class="mt-2 mr-3 text-blue-400">{{ filterCity ? filterCity.name.toUpperCase() : '' }}</span>
-                <span class="mt-2 mr-3 text-blue-400">{{ filterState ? filterState.name.toUpperCase() : '' }}</span>
-                <span class="mt-2 mr-3 text-blue-400">{{ filterCountry ? filterCountry.name.toUpperCase() : '' }}</span>
+                <span class="mt-2 mr-2 text-blue-400" v-if="filterCity">{{  filterCity.name }},</span>
+                <span class="mt-2 mr-2 text-blue-400" v-if="filterState">{{ filterState.name }},</span>
+                <span class="mt-2 mr-3 text-blue-400" v-if="filterCountry">{{ filterCountry.name }}</span>
                 <button @click="showLocation = true" class="p-1 px-4 py-1 text-sm text-white bg-blue-600 rounded-lg">
                     Filter Location
                 </button>

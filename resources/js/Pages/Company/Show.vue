@@ -86,14 +86,12 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
     } else if (tab.value == 'enquiry') {
       axios.get(route("enquiry.index", { search: searchQuery.value }))
         .then((res) => {
-          console.log(res.data);
           enquiriesList.value = res.data;
         });
     } else if (tab.value == 'employees') {
       console.log('employees');
       axios.get(route('company.employees', { search: searchQuery.value }))
         .then((res) => {
-          console.log(res.data);
           employeesList.value = res.data
         });
       // axios.get(route("enquiry.index", { search: searchQuery.value }))
@@ -109,11 +107,17 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
 });
 
 const formatUrl = (url) => {
-  if (!/^https?:\/\//i.test(url)) {
+  // if (!/^https?:\/\//i.test(url)) {
+  //   return 'http://' + url;
+  // }
+  // return url;
+  if (url.includes('http://') || url.includes('https://')) {
+    return url;
+  } else {
     return 'http://' + url;
   }
-  return url;
 }
+
 </script>
 
 <template>
@@ -142,29 +146,29 @@ const formatUrl = (url) => {
       <div class="py-4 bg-gray-100">
         <div class="grid grid-cols-4 border-b-[1px] border-gray-200">
           <button @click="setTab('enquiry')" :class="`${tab === 'enquiry' ? 'border-b-[1px] pb-2 border-black' : ''
-            } transition-all duration-500`">
+              } transition-all duration-500`">
             <p :class="` ${tab === 'enquiry' ? 'font-bold' : ''
-            } w-full flex justify-center`">
+              } w-full flex justify-center`">
               Enquiries
             </p>
           </button>
           <button @click="setTab('sales')" :class="`${tab === 'sales' ? 'border-b-[1px] pb-2 border-black' : ''
-            } transition-all duration-500`">
+              } transition-all duration-500`">
             <p :class="` ${tab === 'sales' ? 'font-bold' : ''} w-full flex justify-center`">
               Sales
             </p>
           </button>
           <button @click="setTab('products')" :class="`${tab === 'products' ? 'border-b-[1px] pb-2 border-black' : ''
-            } transition-all duration-500`">
+              } transition-all duration-500`">
             <p :class="` ${tab === 'products' ? 'font-bold' : ''
-            } w-full flex justify-center`">
+              } w-full flex justify-center`">
               Products
             </p>
           </button>
           <button @click="setTab('employees')" :class="`${tab === 'employees' ? 'border-b-[1px] pb-2 border-black' : ''
-            } transition-all duration-500`">
+              } transition-all duration-500`">
             <p :class="` ${tab === 'employees' ? 'font-bold' : ''
-            } w-full flex justify-center`">
+              } w-full flex justify-center`">
               Employees
             </p>
           </button>

@@ -17,10 +17,14 @@ const props = defineProps({
 
 const tab = ref("all");
 const chatroomList = ref(props.chatrooms)
-console.log(props.chat);
+
 const search = ref(null);
 
 const message = ref(null);
+const form = useForm({
+  chatrooms: []
+});
+
 const selected = ref([]);
 
 const setTab = (tabValue) => {
@@ -28,7 +32,7 @@ const setTab = (tabValue) => {
 };
 
 const getChatrooms = (page = 1) => {
-  axios.get(route('enquiry.chats.show', { page: page, tab: tab.value, chat: props.chat.id, search: newSearchQuery })).then(res => {
+  axios.get(route('sales.chats.show', { page: page, tab: tab.value, chat: props.chat.id })).then(res => {
     chatroomList.value = res.data
   })
 }
@@ -63,23 +67,39 @@ const shareMessage = () => {
     })
 }
 
+const selectAll = ref(false);
 
-const selectAll = computed({
-  get() {
-    return chatroomList.value ? selected.value.length == chatroomList.value.length : false;
-  },
-  set(value) {
-    var temp = []
-    if (value) {
-      chatroomList.value.data.forEach(function (chatroom) {
-        temp.push(chatroom.id)
-      })
-      selected.value = temp
+const selectAllValues = (e) => {
+  var temp = []
+    if (e.target.checked) {
+      selected.value = chatroomList.value.data
+      // chatroomList.value.data.forEach(function (chatroom) {
+      //   temp.push(chatroom.id)
+      // })
+      // selected.value = temp
+      selectAll.value = true
     } else {
       selected.value = temp
+      selectAll.value = false
     }
   }
-})
+
+// const selectAll = computed({
+//   get() {
+//     return chatroomList.value ? selected.value.length == chatroomList.value.length : false;
+//   },
+//   set(value) {
+//     var temp = []
+//     if (value) {
+//       chatroomList.value.data.forEach(function (chatroom) {
+//         temp.push(chatroom.id)
+//       })
+//       selected.value = temp
+//     } else {
+//       selected.value = temp
+//     }
+//   }
+// })
 
 const showModal = ref(false);
 const confirmDelete = () => {
@@ -92,15 +112,31 @@ const closeModal = () => {
 
 const deleteChats = () => {
   showModal.value = false;
-  const form = useForm();
-  form.post(route('chatroom.deleteChats', { chatrooms: selected.value }));
+  form.chatrooms = selected.value
+  form.post(route('chatroom.deleteChats'));
+  chatroomList.value = null;
+  getChatrooms();
+  selectAll.value = false
+  selected.value = []
+
 }
 
 const chatProductName = (title) => {
   // console.log(props.chat.product_name+'-'+props.chat.cas_no+' - ');
   let titleWithoutSpaces = title.replace(/\s+/g, '');
-  
-  return titleWithoutSpaces.replace(props.chat.product_name.replace(/\s+/g, '')+'-'+props.chat.cas_no.replace(/\s+/g, '')+'-',' ').trim();
+
+  return titleWithoutSpaces.replace(props.chat.product_name.replace(/\s+/g, '') + '-' + props.chat.cas_no.replace(/\s+/g, '') + '-', ' ').trim();
+}
+
+const selectedChatRoom = (e) => {
+  if(e.target.checked) {
+    if(selected.value.length == chatroomList.value.data.length){
+      selectAll.value = true;
+    }
+    
+  } else {
+      selectAll.value = false;
+  }
 }
 
 </script>
@@ -144,7 +180,7 @@ const chatProductName = (title) => {
         <TextInput type="text" class="w-full p-2 bg-gray-200" v-model="search" placeholder="Search" />
 
         <div class="mt-4">
-          <div class="my-5">
+          <div class="my-5" v-if="search && chatroomList.data.length > 0">
             <p class="text-xl font-bold">Share message</p>
             <form @submit.prevent="shareMessage">
               <textarea class="w-full rounded-lg focus:outline-none" v-model="message" required></textarea>
@@ -155,7 +191,7 @@ const chatProductName = (title) => {
           </div>
 
           <div class="flex justify-between items-center pr-[2rem]">
-            <input type="checkbox" v-model="selectAll">
+            <input type="checkbox" v-model="selectAll" v-if="chatroomList.data.length > 0" @change="selectAllValues">
             <!-- <button class="px-4 py-2 text-sm text-white bg-black rounded-lg">Block</button> -->
             <button @click="confirmDelete" class="px-4 py-2 text-sm text-white bg-red-600 rounded-lg"
               v-if="selected.length > 0">Delete</button>
@@ -175,10 +211,10 @@ const chatProductName = (title) => {
               </p>
             </button>
           </div>
-          <div v-for="chatroom in chatroomList.data" class="mt-4"
+          <div v-for="(chatroom) in chatroomList.data" class="mt-4"
             :class="`bg-white flex items-center gap-2 px-[0.2rem]`">
             <div class="flex items-center w-full gap-4 p-1 rounded-lg">
-              <input type="checkbox" class="block" :value="chatroom" v-model="selected">
+              <input type="checkbox" class="block" :value="chatroom" v-model="selected" @change="selectedChatRoom">
               <div class="relative">
                 <input class="block star" type="checkbox" v-model="chatroom.starred" @change="addStar(chatroom.id)">
               </div>

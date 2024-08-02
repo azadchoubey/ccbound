@@ -30,7 +30,7 @@ class ProductController extends Controller
         $filterCity = null;
 
         $productsQuery = Product::query();
-        $productsQuery->where('approved', '1')->where('active', 1);
+        
         $productsQuery->orderBy('updated_at', 'DESC');
         
         if ($request->search) {
@@ -51,6 +51,7 @@ class ProductController extends Controller
             $filterCity = City::where('id', $request->city)->first();
         }
         
+        $productsQuery->where('approved', 1)->where('active', 1);
         $products = $productsQuery->paginate(4);
         if ($request->wantsJson()) {
             return $products;
@@ -212,12 +213,15 @@ class ProductController extends Controller
         $request->validate([
             'productName' => ['required', 'string', 'max:255'],
             'casNo' => ['required', 'string', 'max:255', 'regex:/^[0-9-]+$/'],
-            'structure' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
             'country' => ['required'],
         ]);
 
         $structureNameToStore = $product->structure;
         $docsNameToStore = $product->docs;
+
+        if ($request->structure != 'no image') {
+            $request->validate(['structure' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:512']]);
+        }
 
         if($request->structure == 'no image' && $product->structure) {
             $old_structure = public_path('storage/product_structure/' . $product->structure);

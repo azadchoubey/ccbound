@@ -57,9 +57,11 @@ const isDocx = (fileName) => {
                 <div :class="`flex items-start justify-between gap-1`">
                     <div>
                         <Link :href="link" class="block text-lg font-bold">{{ details?.product_name }}</Link>
-                        <span class="text-sm text-gray-400" v-if="details && details?.type">{{ details.type.toUpperCase() }}</span> 
-                        <span v-if="details.type && details.category"> | </span> 
-                        <span class="text-sm text-blue-400" v-if="details && details?.category">{{ details.category.toUpperCase() }}</span>
+                        <span class="text-sm text-gray-400" v-if="details && details?.type">{{
+                    details.type.toUpperCase() }}</span>
+                        <span v-if="details.type && details.category"> | </span>
+                        <span class="text-sm text-blue-400" v-if="details && details?.category">{{
+                    details.category.toUpperCase() }}</span>
                         <Link :href="link" class="block mt-2 text-sm font-bold">
                         </Link>
                         <Link :href="link">{{ details?.cas_no }}</Link>
@@ -74,10 +76,13 @@ const isDocx = (fileName) => {
                     </div>
                     <a :href="details.docs_url" target="_blank" v-if="details.docs" class="mt-10 mb-2">
                         <img :src="details.docs_url" width="80" height="90" v-if="isImage(details.docs)" class="mr-5" />
-                        <embed :src="details.docs_url" width="80" height="90" type="application/pdf" class="mr-5"
-                            v-else-if="isPDF(details.docs)" />
-                        <img :src="'/assests/images/docfile.png'" width="50" height="70" class="mt-10 mr-5"  v-else-if="isDocx(details.docs)" />
-                        
+                        <div v-else-if="isPDF(details.docs)">
+                            <embed :src="details.docs_url" width="80" height="90" type="application/pdf" class="mr-5" />
+                            <span class="text-blue-400">Preview</span>
+                        </div>
+                        <img :src="'/assests/images/docfile.png'" width="50" height="70" class="mt-10 mr-5"
+                            v-else-if="isDocx(details.docs)" />
+
                         <!-- <p>{{ details.docs }}</p> -->
 
                     </a>

@@ -86,7 +86,10 @@ class SaleChatsController extends Controller
         if ($request->wantsJson()) {
             return $chats;
         }
-        return Inertia::render('Sales/Chats/Index', compact('chats'));
+
+        $auth_id = Auth::id();
+        
+        return Inertia::render('Sales/Chats/Index', compact('chats','auth_id'));
     }
 
     /**

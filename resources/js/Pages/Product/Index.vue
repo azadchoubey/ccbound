@@ -135,6 +135,7 @@ const shareMessages = () => {
 //         form.products = []
 //     }
 // });
+const noResultFound = ref(false);
 
 const searchProducts = () => {
     if (searchQuery.value !== "") {
@@ -145,10 +146,12 @@ const searchProducts = () => {
                 if (productsList.value.data.length > 0) {
                     showProducts.value = true;
                     showShareMessage = true
+                    noResultFound.value = false;
                 } else {
                     showProducts.value = false;
                     showShareMessage = false
                     form.products = []
+                    noResultFound.value = true
                 }
 
             });
@@ -204,12 +207,12 @@ const selectAll = (e) => {
                     <div :class="`${!showProducts ? 'text-center' : ''}`">
                         <button type="button" class="p-1 px-4 py-1 mt-10 text-white bg-blue-600 rounded-lg"
                             @click="searchProducts">Submit</button>
-                        <span class="mt-2 ml-3 mr-3 text-blue-400">{{ filterCity ? filterCity.name.toUpperCase() : ''
-                            }}</span>
-                        <span class="mt-2 mr-3 text-blue-400">{{ filterState ? filterState.name.toUpperCase() : ''
-                            }}</span>
-                        <span class="mt-5 ml-3 mr-3 text-blue-400">
-                            {{ filterCountry ? filterCountry.name.toUpperCase() : '' }}</span>
+                        <span class="mt-2 ml-2 mr-2 text-blue-400" v-if="filterCity">{{ filterCity.name
+                            }},</span>
+                        <span class="mt-2 mr-2 text-blue-400" v-if="filterState">{{ filterState.name
+                            }},</span>
+                        <span class="mt-5 mr-3 text-blue-400">
+                            {{ filterCountry ? filterCountry.name : '' }}</span>
                         <button @click="showLocation = true"
                             class="p-1 px-4 py-1 mt-2 text-white bg-blue-600 rounded-lg">
                             Filter Location
@@ -235,6 +238,7 @@ const selectAll = (e) => {
             <input type="checkbox" class="block mb-5" value="0" v-model="selectProduct" v-if="showShareMessage"
                 @change="selectAll" />
             <span v-if="showProducts"><b>Results For</b>: {{ searchQuery }}</span>
+            <span v-if="noResultFound"><b>No Result Found</b></span>
             <InfiniateScroll @loadMore="loadMore" class="mt-4 space-y-4" v-if="showProducts">
                 <div v-for="product in productsList.data" class="flex w-full gap-2">
                     <input type="checkbox" class="block" :value="product.id" v-model="form.products"

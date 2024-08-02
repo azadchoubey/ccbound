@@ -203,6 +203,14 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
     }
 });
 
+const checkUrl = (url) => {
+  if(url.includes('http://') || url.includes('https://')){
+    return url;
+  } else {
+    return 'http://'+url;
+  }
+}
+
 </script>
 
 <template>
@@ -223,7 +231,7 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
           <Link :href="route('company.show', { id: profile.company_id })">@{{ profile.company.name }}</Link>
         </div>
         <p class="text-sm">{{ profile.address }}</p>
-        <a :href="profile.company.website" target="_blank" class="block text-blue-600">{{ profile.company.website }}</a>
+        <a :href="checkUrl(profile.company.website)" target="_blank" class="block text-blue-600">{{ profile.company.website }}</a>
 
         <Link v-if="profile.canEdit" :href="route('profile.show')"
           class="bg-[#0095F6] text-white flex items-center w-[8rem] px-3 py-2 rounded-lg mb-3">

@@ -378,15 +378,12 @@ class SalesController extends Controller
         $request->validate([
             'productName' => ['required', 'string', 'max:255'],
             'casNo' => ['required', 'string', 'max:255', 'regex:/^[0-9-]+$/'],
-            'structure' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
             'country' => ['required'],
         ]);
-        $request->validate([
-            'productName' => ['required', 'string', 'max:255'],
-            'casNo' => ['required', 'string', 'max:255', 'regex:/^[0-9-]+$/'],
-            'structure' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:2048'],
-            'country' => ['required'],
-        ]);
+
+        if ($request->structure != 'no image') {
+            $request->validate(['structure' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif,svg', 'max:512']]);
+        }
 
         $sale->product_name = $request->productName;
         $sale->cas_no = $request->casNo;

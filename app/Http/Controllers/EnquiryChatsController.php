@@ -91,7 +91,9 @@ class EnquiryChatsController extends Controller
         }
         
         // return $chats;
-        return Inertia::render('Enquiry/Chats/Index', compact('chats'));
+        $auth_id = Auth::id();
+
+        return Inertia::render('Enquiry/Chats/Index', compact('chats','auth_id'));
     }
 
     /**
@@ -134,7 +136,7 @@ class EnquiryChatsController extends Controller
      */
     public function show(Request $request, EnquiryChat $chat)
     {
-        $chatrooms = $chat->chatRooms()->orderBy('updated_at', 'DESC')->paginate();
+        $chatrooms = $chat->chatRooms()->with('enquiryChats')->orderBy('updated_at', 'DESC')->paginate();
 
         if ($request->tab === 'starred') {
             $chatrooms = $chat->starredChatRooms()->paginate();

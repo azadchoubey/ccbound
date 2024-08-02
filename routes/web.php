@@ -29,6 +29,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\TermsController;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,13 @@ use App\Http\Controllers\TermsController;
 |
 */
 
+
+
+Route::get('/run-migration', function () {
+    Artisan::call('migrate');
+    return 'Migration run successfully!';
+});
+
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -50,6 +58,7 @@ Route::get('/', function () {
 // })->name('register.demo');
 
 Route::get('/logo', [AuthController::class, 'getLogo'])->name('logo')->middleware('guest');
+
 
 Route::get('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
 
