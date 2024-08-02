@@ -98,7 +98,7 @@ watch(search, async (newSearchQuery, oldSearchQuery) => {
           <tbody>
             <tr v-for="(product, index) in productsList.data" class="hover:bg-gray-100 focus-within:bg-gray-100">
               <td class="border-t">
-                <p class="flex items-center px-6 py-4 font-semibold">{{ formatDate(product.updated_at.slice(0, 10)) }}
+                <p class="flex items-center px-6 py-4 font-semibold">{{ formatDate(product.created_at.slice(0, 10)) }}
                 </p>
               </td>
               <td class="border-t">
