@@ -67,16 +67,18 @@ class ChatroomController extends Controller
 
     public function shareMessage(Request $request)
     {
+        
         if ($request->chatrooms) {
             foreach ($request->chatrooms as $chatroom) {
                 $message = new Message();
-                $message->chatroom_id = $chatroom;
+                $message->chatroom_id = $chatroom['id'];
                 $message->user_id = Auth::user()->id;
                 $message->message = $request->message;
 
-                $chatroom = ChatRoom::find($chatroom);
-                $chatroom->message_at = Carbon::now()->toDateTimeString();
-                $chatroom->save();
+                $new_chatroom = ChatRoom::find($chatroom['id']);
+                $new_chatroom->message_at = Carbon::now()->toDateTimeString();
+                
+                $new_chatroom->save();
 
                 $message->save();
             }

@@ -180,7 +180,7 @@ const selectedChatRoom = (e) => {
         <TextInput type="text" class="w-full p-2 bg-gray-200" v-model="search" placeholder="Search" />
 
         <div class="mt-4">
-          <div class="my-5" v-if="search && chatroomList.data.length > 0">
+          <div class="my-5" v-if="search && chatroomList.data.length > 0 && selected.length > 0">
             <p class="text-xl font-bold">Share message</p>
             <form @submit.prevent="shareMessage">
               <textarea class="w-full rounded-lg focus:outline-none" v-model="message" required></textarea>
@@ -236,7 +236,7 @@ const selectedChatRoom = (e) => {
                   </p>
                 </div>
                 <div>
-                  <div v-if="!chatroom.message_read" class="w-3 h-3 bg-black rounded-full"></div>
+                  <div v-if="!chatroom.message_read && chatroom.auth_id != chatroom.last_message.user_id" class="w-3 h-3 bg-blue-400 rounded-full"></div>
                 </div>
               </div>
               </Link>
