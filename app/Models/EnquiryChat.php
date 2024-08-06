@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\User;
+use App\Models\SaleChat ;
 use App\Models\EnquiryChatRoom;
 
 class EnquiryChat extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'id'; 
 
     protected $appends = [
         'last_message'
@@ -31,5 +33,8 @@ class EnquiryChat extends Model
 
     public function getLastMessageAttribute(){
         return $this->chatRooms->max('message_at');
+    }
+    public function saleData(){
+        return $this->hasOne(SaleChat::class,'cas_no','cas_no');
     }
 }

@@ -136,8 +136,10 @@ class EnquiryChatsController extends Controller
      */
     public function show(Request $request, EnquiryChat $chat)
     {
+        $chat->saleinfo = $chat->with('saleData')->get()->pluck('saleData');
+        dd($chat->saleinfo[0]);
         $chatrooms = $chat->chatRooms()->with('enquiryChats')->orderBy('updated_at', 'DESC')->paginate();
-
+       
         if ($request->tab === 'starred') {
             $chatrooms = $chat->starredChatRooms()->paginate();
         }
@@ -160,13 +162,17 @@ class EnquiryChatsController extends Controller
             $chatroom->members = $chatroom->members;
             $chatroom->users = $chatroom->users;
             $chatroom->auth_id = Auth::user()->id;
+           
+           
         }
 
         $chat->user = $chat->user;
-
+       
+        dd( $chatrooms);
         if ($request->wantsJson()) {
             return $chatrooms;
         }
+
 
         return Inertia::render('Enquiry/Chats/Show', compact('chat', 'chatrooms'));
     }

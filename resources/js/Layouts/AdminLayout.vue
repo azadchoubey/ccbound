@@ -85,7 +85,7 @@ const logout = () => {
               <BuildingIcon2 />
               <p v-if="viewMenu">Companies</p>
             </Link>
-            <Link
+            <!-- <Link
               v-if="$page.props.user.role === 'super_admin' || $page.props.user.role === 'accounts_admin'"
               :href="route('admin.country.index')"
               :class="`${
@@ -94,7 +94,7 @@ const logout = () => {
             >
               <BuildingIcon2 />
               <p v-if="viewMenu">Country</p>
-            </Link>
+            </Link> -->
             
             <Link
               v-if="$page.props.user.role === 'super_admin' || $page.props.user.role === 'data_admin'"
